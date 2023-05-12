@@ -1,0 +1,25 @@
+{
+    "name": "cebe/yii2-loki-log-target",
+    "description": "Grafana Loki Log Target for Yii2",
+    "keywords": ["yii2", "grafana", "loki", "logging"],
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "cebe\\lokilogtarget\\": "src/"
+        }
+    },
+    "support": {
+        "issues": "https://github.com/cebe/yii2-loki-log-target/issues",
+        "source": "https://github.com/cebe/yii2-loki-log-target"
+    },
+    "authors": [
+        {
+            "name": "Carsten Brandt",
+            "email": "mail@cebe.cc"
+        }
+    ],
+    "require": {
+        "php": ">=7.1.0"
+    }
+}
