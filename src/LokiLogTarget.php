@@ -123,7 +123,7 @@ class LokiLogTarget extends Target
         list($text, $level, $category, $timestamp) = $message;
         $level = Logger::getLevelName($level);
         $level = $this->remapLevel($level, $category);
-        if ($level == false || $level == 'false') {
+        if ($level === false) {
             return false;
         }
         if (!is_string($text)) {
