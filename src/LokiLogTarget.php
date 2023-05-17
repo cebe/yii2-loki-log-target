@@ -99,7 +99,10 @@ class LokiLogTarget extends Target
     {
         $lokiMessages = [];
         foreach ($this->messages as $key => $message) {
-            $lokiMessages[] = $this->formatMessage($message);
+            $lokiMessage = $this->formatMessage($message);
+            if ($lokiMessage) {
+                $lokiMessages[] = $lokiMessage;
+            }
         }
 
         // https://grafana.com/docs/loki/latest/api/#push-log-entries-to-loki
@@ -120,6 +123,9 @@ class LokiLogTarget extends Target
         list($text, $level, $category, $timestamp) = $message;
         $level = Logger::getLevelName($level);
         $level = $this->remapLevel($level, $category);
+        if ($level == false || $level == 'false') {
+            return false;
+        }
         if (!is_string($text)) {
             // exceptions may not be serializable if in the call stack somewhere is a Closure
             if ($text instanceof \Exception || $text instanceof \Throwable) {
