@@ -44,10 +44,12 @@ Add the log target to your application config:
                     // yii category
                     'yii\web\HttpException:404' => [
                         // yii level => loki level
+                        // set loki level to false, to drop messages with that category
                         '*' => 'info',
                     ],
                     'yii\web\HttpException:401' => [
                         // yii level => loki level
+                        // set loki level to false, to drop messages with that category
                         '*' => 'warning',
                     ],
                 ],
