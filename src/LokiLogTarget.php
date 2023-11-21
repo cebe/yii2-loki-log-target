@@ -111,7 +111,7 @@ class LokiLogTarget extends Target
         ];
 
         $headers = [];
-        $data = Json::encode($lokiRequestData, JSON_INVALID_UTF8_SUBSTITUTE | JSON_HEX_APOS | JSON_HEX_QUOT);
+        $data = Json::encode($lokiRequestData, JSON_INVALID_UTF8_SUBSTITUTE | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_UNESCAPED_UNICODE);
         if (function_exists('gzencode')) {
             $data = gzencode($data);
             $headers['Content-Encoding'] = 'gzip';
