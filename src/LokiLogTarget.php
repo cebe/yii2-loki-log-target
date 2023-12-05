@@ -62,10 +62,10 @@ class LokiLogTarget extends Target
      */
     public $contextLevels = null;
 
-	/**
-	 * @var bool|null enable gzip compression. Enabled by default. Requires ext-zlib.
-	 */
-	public $enableGzip = true;
+    /**
+     * @var bool|null enable gzip compression. Enabled by default. Requires ext-zlib.
+     */
+    public $enableGzip = true;
 
     public function init()
     {
