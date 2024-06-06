@@ -28,7 +28,13 @@ class LokiLogTarget extends Target
      * @var string Loki Basic Auth Password
      */
     public $lokiAuthPassword;
-
+    /**
+     * @var array|null request options for the HTTP request sent to loki.
+     * If this property is an array, the value of this property will overwrite all Request options that might be configured via DI container.
+     * @see Request::setOptions() for available options.
+     * @since 1.2.0
+     */
+    public $requestOptions = null;
     /**
      * @var array labels to send to loki. If not set, defaults to [
      *     'host' => gethostname(),
@@ -85,15 +91,20 @@ class LokiLogTarget extends Target
 
     protected function getClient()
     {
-        return new Client([
-            'requestConfig' => [
-                'class' => Request::class,
-                'url' => $this->lokiPushUrl,
-                'headers' => [
-                    'Content-Type' => 'application/json',
-                    'Authorization' => 'Basic ' . base64_encode($this->lokiAuthUser . ':' .$this->lokiAuthPassword),
-                ],
+        $requestConfig = [
+            'class' => Request::class,
+            'url' => $this->lokiPushUrl,
+            'headers' => [
+                'Content-Type' => 'application/json',
+                'Authorization' => 'Basic ' . base64_encode($this->lokiAuthUser . ':' .$this->lokiAuthPassword),
             ],
+        ];
+        if ($this->requestOptions !== null) {
+            // options are only set if not null, to avoid overriding settings set via DI container
+            $requestConfig['options'] = $this->requestOptions;
+        }
+        return new Client([
+            'requestConfig' => $requestConfig,
         ]);
     }
 
