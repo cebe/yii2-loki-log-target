@@ -62,6 +62,11 @@ class LokiLogTarget extends Target
      */
     public $contextLevels = null;
 
+    /**
+     * @var bool|null enable gzip compression. Enabled by default. Requires ext-zlib.
+     */
+    public $enableGzip = true;
+
     public function init()
     {
         parent::init();
@@ -110,9 +115,14 @@ class LokiLogTarget extends Target
             'streams' => $lokiMessages
         ];
 
-        // TODO Content-Encoding: gzip
+        $headers = [];
+        $data = Json::encode($lokiRequestData, JSON_INVALID_UTF8_SUBSTITUTE | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_UNESCAPED_UNICODE);
+        if ($this->enableGzip && function_exists('gzencode')) {
+            $data = gzencode($data);
+            $headers['Content-Encoding'] = 'gzip';
+        }
 
-        $response = $this->getClient()->post($this->lokiPushUrl, Json::encode($lokiRequestData, JSON_INVALID_UTF8_SUBSTITUTE | JSON_HEX_APOS | JSON_HEX_QUOT))->send();
+        $response = $this->getClient()->post($this->lokiPushUrl, $data, $headers)->send();
         if (!$response->isOk) {
             throw new Exception('Unable to send request to Loki! Status ' . $response->getStatusCode() . ' - ' . $response->getContent());
         }
